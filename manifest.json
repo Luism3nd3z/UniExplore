@@ -7,27 +7,27 @@
   "theme_color": "#007bff",
   "icons": [
     {
-      "src": "UE_32.png",
+      "src": "./UE_32.png",
       "sizes": "32x32",
       "type": "image/png"
   },
   {
-    "src": "UE_48.png",
+    "src": "./UE_48.png",
     "sizes": "48x48",
     "type": "image/png"
 }, 
 {
-  "src": "UE_72.png",
+  "src": "./UE_72.png",
   "sizes": "72x72",
   "type": "image/png"
 }, 
 {
-  "src": "UE_92.png",
+  "src": "./UE_92.png",
   "sizes": "92x92",
   "type": "image/png"
 }, 
 {
-  "src": "UE_144.png",
+  "src": "./UE_144.png",
   "sizes": "144x144",
   "type": "image/png"
 },

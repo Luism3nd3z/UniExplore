@@ -1,6 +1,6 @@
 const cache_name = "UniExplore"
 
-const pre_cached = [".", "style.css","img/"]
+const pre_cached = [".", "style.css",]
 
 self.addEventListener("install", event => {
     async function preCacheResources(){
