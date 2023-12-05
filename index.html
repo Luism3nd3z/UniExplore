@@ -5,14 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniExplore</title>
-    <link rel="stylesheet" href="pwa.css">
-    <link rel="manifest" href="manifest.json">
+    <link rel="stylesheet" href="./style.css">
+    <link rel="manifest" href="./manifest.json">
 </head>
 
 <body>
     <div class="container">
         <div class="image-container">
-            <img id="building-image" src="mapa utec.jpg" alt="Edificio C">
+            <img id="building-image" src="./mapa utec.jpg" alt="Edificio C">
             
             <div class="building-button" id="buildingA">Edificio A</div>
             <div class="building-button" id="buildingB">Edificio B</div>
@@ -34,11 +34,11 @@
             </div>
         </div>
     </div>
-    <script src="/pwa.js"></script>
+    <script src="./pwa.js"></script>
 
     <script>
         if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
+            navigator.serviceWorker.register('./sw.js')
                 .then((registration) => {
                     console.log('Service Worker registrado con éxito:', registration);
                 })

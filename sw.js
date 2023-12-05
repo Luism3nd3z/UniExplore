@@ -1,35 +1,49 @@
-const CACHE_NAME = "Uni-explore-V1";
-const PRE_CACHED_RESOURCES = ["/", "index.css", "pwa.js"];
+const cache_name = "UniExplore"
+
+const pre_cached = [".", "style.css","img/"]
 
 self.addEventListener("install", event => {
-  event.waitUntil(preCacheResources());
-  console.log("WORKER: install event in progress.");
+    async function preCacheResources(){
+        //eliminar cache previo
+        if ('caches' in navigator) {
+            caches.keys().then(function(cacheNames) {
+              cacheNames.forEach(function(cacheName) {
+                if (cacheName.startsWith(cache_name)) {
+                  caches.delete(cacheName);
+                }
+              });
+            });
+          }          
+        //crear cache
+        const cache = await caches.open(cache_name);
+        cache.addAll(pre_cached);
+    }
+    event.waitUntil(preCacheResources());
 });
 
-self.addEventListener("activate", event => {
-  console.log("WORKER: activate event in progress.");
+self.addEventListener("fetch", event =>  {
+    async function returnCachedResource(){
+        const cache = await caches.open(cache_name);
+        const cachedResponse = await cache.match(event.request.url);
+
+        if (cachedResponse){
+            return cachedResponse;
+        }else{
+            const fetchResponse = await fetch(event.request.url);
+            cache.put(event.request.url, fetchResponse.clone());
+            return fetchResponse
+        }
+    }
+    event.respondWith(returnCachedResource());
 });
 
-self.addEventListener("fetch", event => {
-  event.respondWith(returnCachedResource());
-  console.log('WORKER: Fetching', event.request);
+
+self.addEventListener('notificationclick', function(event) {
+  console.log('[Service Worker] Notification click received.');
+
+  event.notification.close();
+
+  event.waitUntil(
+    clients.openWindow('https://developers.google.com/web')
+  );
 });
-
-async function preCacheResources() {
-  const cache = await caches.open(CACHE_NAME);
-  await cache.addAll(PRE_CACHED_RESOURCES);
-}
-
-async function returnCachedResource() {
-  const cache = await caches.open(CACHE_NAME);
-  const cachedResponse = await cache.match(event.request);
-
-  if (cachedResponse) {
-    return cachedResponse;
-  } else {
-    const fetchResponse = await fetch(event.request);
-    await cache.put(event.request, fetchResponse.clone());
-    return fetchResponse;
-  }
-}
-
