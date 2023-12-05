@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Ventana Emergente</title>
+  <style>
+    .ventana-emergente {
+      display: none;
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      background-color: white;
+      padding: 20px;
+      border: 1px solid #ccc;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      z-index: 9999;
+    }
+
+    .cerrar {
+      position: absolute;
+      top: 5px;
+      right: 5px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+  <button id="mostrarVentana">Mostrar Ventana Emergente</button>
+
+  <div class="ventana-emergente" id="ventanaEmergente">
+    <span class="cerrar" onclick="cerrarVentana()">X</span>
+    <h2>Información sobre Edificio A</h2>
+    <p>Áreas, horarios, servicios, etc.</p>
+    <img src="ruta_de_la_imagen.jpg" alt="Imagen de ejemplo">
+  </div>
+
+  <script>
+    document.getElementById('mostrarVentana').addEventListener('click', function() {
+      document.getElementById('ventanaEmergente').style.display = 'block';
+    });
+
+    function cerrarVentana() {
+      document.getElementById('ventanaEmergente').style.display = 'none';
+    }
+  </script>
+</body>
+</html>

@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UniExplore</title>
+    <link rel="stylesheet" href="pwa.css">
+    <link rel="manifest" href="manifest.json">
+</head>
+
+<body>
+    <div class="container">
+        <div class="image-container">
+            <img id="building-image" src="mapa utec.jpg" alt="Edificio C">
+            
+            <div class="building-button" id="buildingA">Edificio A</div>
+            <div class="building-button" id="buildingB">Edificio B</div>
+            <div class="building-button" id="buildingC">Edificio C</div>
+        </div>
+        <div class="info-container">
+            <div class="search-bar">
+                <input type="text" id="search-input" placeholder="Buscar lugar...">
+                <button id="button">Buscar edificio</button>
+            </div>
+            <div class="info-panel">
+                <h1>Edificio Seleccionado</h1>
+                <p id="building-info">
+
+                    Estamos encantados de presentarte a UniExplore, tu guía interactiva para navegar por el campus de la UTEC Tulancingo. Este innovador mapa digital está diseñado para simplificar tu experiencia universitaria al proporcionarte una herramienta integral para encontrar y ubicar fácilmente los diferentes edificios y espacios dentro de nuestra institución.
+                    
+                    Con UniExplore, podrás explorar cada rincón de nuestro campus de manera intuitiva y eficiente. No solo te permitirá localizar los edificios académicos, administrativos, y áreas clave, sino que también tendrás acceso a información detallada sobre cada lugar. Desde aulas y laboratorios hasta áreas recreativas, bibliotecas y puntos de interés, encontrarás datos relevantes que te ayudarán a familiarizarte con todos los servicios disponibles en la universidad.</p>
+                
+            </div>
+        </div>
+    </div>
+    <script src="/pwa.js"></script>
+
+    <script>
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then((registration) => {
+                    console.log('Service Worker registrado con éxito:', registration);
+                })
+                .catch((error) => {
+                    console.error('Error al registrar el Service Worker:', error);
+                });
+        };
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            const button = document.getElementById('button');
+            const searchInput = document.getElementById('search-input');
+            const buildingInfo = document.getElementById('building-info');
+            const moreInfoButton = document.getElementById('more-info-button');
+
+            button.addEventListener('click', function() {
+                const searchTerm = searchInput.value.trim().toLowerCase();
+                if (searchTerm) {
+                    switch (searchTerm) {
+                        case 'a':
+                            buildingInfo.textContent = 'Información sobre Edificio A: Áreas, horarios, servicios, etc.';
+                            break;
+                        case 'b':
+                            buildingInfo.textContent = 'Información sobre Edificio B: Áreas, horarios, servicios, etc.';
+                            break;
+                        case 'c':
+                            buildingInfo.textContent = 'Información sobre Edificio C: Áreas, horarios, servicios, etc.';
+                            break;
+                        default:
+                            buildingInfo.textContent = 'No se encontró información para el edificio ingresado.';
+                    }
+
+                    // Mostrar la notificación al hacer clic en el botón
+                    const notificationTitle = 'Búsqueda de edificio exitosa';
+                    const notificationOptions = {
+                        body: `Se buscó con éxito el edificio: ${searchTerm}`,
+                    };
+
+                    // Comprobar si las notificaciones están disponibles en el navegador
+                    if ('Notification' in window && Notification.permission === 'granted') {
+                        // Mostrar la notificación
+                        new Notification(notificationTitle, notificationOptions);
+                    } else if ('Notification' in window && Notification.permission !== 'denied') {
+                        // Pedir permiso para mostrar notificaciones
+                        Notification.requestPermission().then(function(permission) {
+                            if (permission === 'granted') {
+                                // Mostrar la notificación si se otorga el permiso
+                                new Notification(notificationTitle, notificationOptions);
+                            }
+                        });
+                    }
+                } else {
+                    buildingInfo.textContent = 'Ingrese un término de búsqueda.';
+                }
+            });
+            
+        });
+    </script>
+</body>
+
+</html>
