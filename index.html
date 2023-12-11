@@ -1,39 +1,70 @@
 <!DOCTYPE html>
 <html lang="es">
-
+ 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>UniExplore</title>
     <link rel="stylesheet" href="./style.css">
     <link rel="manifest" href="./manifest.json">
+    <!-- Ejemplo con A-Frame -->
+<script src="https://aframe.io/releases/1.3.0/aframe.min.js"></script>
+<script src="https://cdn.rawgit.com/donmccurdy/aframe-extras/v6.0.0/dist/aframe-extras.min.js"></script>
 </head>
 
 <body>
     <div class="container">
-        <div class="image-container">
-            <img id="building-image" src="./mapa utec.jpg" alt="Edificio C">
+        <div class="image-container" style="position: relative; overflow: hidden;">
+            <img id="building-image" src="./utec.jpg" alt="Edificio C">
+
+            <!-- Añadir estilos de posición para cada botón -->
+            <div class="building-button" id="buildingA" data-info="En el imponente edificio universitario, se encuentra: Rectoría Dir. Administración y Finanzas, Dir.Planeación y Evaluación ; La Rectoría se erige como el epicentro de la toma de decisiones estratégicas, donde el líder académico supervisa y guía el rumbo de la institución. En las oficinas de la Dirección de Administración y Finanzas, se gestionan con precisión los recursos financieros, garantizando la eficiencia y sostenibilidad económica de la universidad. Al mismo tiempo, la Dirección de Planeación y Evaluación trabaja arduamente para diseñar y evaluar políticas educativas y programas, asegurando la calidad y relevancia de la enseñanza. Este edificio se convierte así en el corazón administrativo de la universidad, donde convergen las decisiones estratégicas, la gestión financiera y la planificación académica para fomentar un entorno educativo próspero y de calidad." style="left: 435px; top: 338px;"  
             
-            <div class="building-button" id="buildingA">Edificio A</div>
-            <div class="building-button" id="buildingB">Edificio B</div>
-            <div class="building-button" id="buildingC">Edificio C</div>
+              >Edificio A</div>
+            <div class="building-button" id="buildingB" data-info="
+            El edificio de mantenimiento de nuestra universidad es esencial para preservar nuestras instalaciones. Aquí, un equipo especializado realiza reparaciones y gestiona servicios básicos para mantener un entorno seguro y funcional. Además, este espacio es clave para la planificación y ejecución de proyectos de mejora continua, contribuyendo al bienestar y desarrollo de nuestra comunidad educativa." style="left: 600px; top: 395px;">Edificio B</div>
+            <div class="building-button" id="buildingC" data-info="
+            El edificio de Secretaría Académica, Tutorías y Dirección de Idiomas es un componente central en el campus universitario, encargado de la coordinación académica, apoyo individualizado a través de Tutorías, y el fortalecimiento de habilidades lingüísticas extranjeras. Este espacio refleja el compromiso de la universidad con la excelencia académica y el desarrollo integral de los estudiantes." style="left: 710px; top: 375px;">Edificio C</div>
+            <div class="building-button" id="buildingE" data-info="
+            En este apartado se encuentran los estacionamientos." style="left: 435px; top: 425px;">Edificio E</div>
+            <div class="building-button" id="buildingF" data-info="
+            Centro de desarrollo" style="left: 530px; top: 310px;">Edificio F</div>
+            <div class="building-button" id="buildingG" data-info="
+            Dirección de vinculación, gestión empresarial, educación continua, seguimiento de egresados, sistemas y soporte técnico y desarrollo de sistemas." style="left: 640px; top: 290px;">Edificio G</div>
+            <div class="building-button" id="buildingH" data-info="
+            Energias renovables, extensión universitaria y actividades culturales y deportivas." style="left: 570px; top: 200px;">Edificio H</div>
+            <div class="building-button" id="buildingI" data-info="
+            Biblioteca" style="left: 700px; top: 210px;">Edificio I</div>
+        
+            <div class="building-button" id="buildingJ" data-info="
+            Coordinación de Terapia Fisica , Enfermeria y Salud reproductiva." style="left: 435px; top: 500px;">Edificio J</div>
+        
+            <div class="building-button" id="buildingK" data-info="
+            Dirección Área Electromecanica y coordinación de criminalistica" style="left: 733px; top: 290px;">Edificio K</div>
+        
+        
+        
         </div>
+        
         <div class="info-container">
+            <button id="360-view-button">Vista 360</button><br>
+      
+
             <div class="search-bar">
                 <input type="text" id="search-input" placeholder="Buscar lugar...">
                 <button id="button">Buscar edificio</button>
             </div>
-            <div class="info-panel">
+            <div class="info-panel" id="building-info-container">
                 <h1>Edificio Seleccionado</h1>
                 <p id="building-info">
-
-                    Estamos encantados de presentarte a UniExplore, tu guía interactiva para navegar por el campus de la UTEC Tulancingo. Este innovador mapa digital está diseñado para simplificar tu experiencia universitaria al proporcionarte una herramienta integral para encontrar y ubicar fácilmente los diferentes edificios y espacios dentro de nuestra institución.
-                    
-                    Con UniExplore, podrás explorar cada rincón de nuestro campus de manera intuitiva y eficiente. No solo te permitirá localizar los edificios académicos, administrativos, y áreas clave, sino que también tendrás acceso a información detallada sobre cada lugar. Desde aulas y laboratorios hasta áreas recreativas, bibliotecas y puntos de interés, encontrarás datos relevantes que te ayudarán a familiarizarte con todos los servicios disponibles en la universidad.</p>
-                
+                    <!-- Contenido de información predeterminado -->
+                    Estamos encantados de presentarte a UniExplore...
+                </p>
             </div>
         </div>
     </div>
+    <div id="360-scene"><button id="back-to-start-button">Inicio</button></div>
+
     <script src="./pwa.js"></script>
 
     <script>
@@ -46,7 +77,7 @@
                     console.error('Error al registrar el Service Worker:', error);
                 });
         };
-        
+
         document.addEventListener('DOMContentLoaded', function() {
             const button = document.getElementById('button');
             const searchInput = document.getElementById('search-input');
@@ -58,14 +89,35 @@
                 if (searchTerm) {
                     switch (searchTerm) {
                         case 'a':
-                            buildingInfo.textContent = 'Información sobre Edificio A: Áreas, horarios, servicios, etc.';
+                            buildingInfo.textContent = 'En el imponente edificio universitario, se encuentra: Rectoría Dir. Administración y Finanzas, Dir.Planeación y Evaluación; La Rectoría se erige como el epicentro de la toma de decisiones estratégicas, donde el líder académico supervisa y guía el rumbo de la institución. En las oficinas de la Dirección de Administración y Finanzas, se gestionan con precisión los recursos financieros, garantizando la eficiencia y sostenibilidad económica de la universidad. Al mismo tiempo, la Dirección de Planeación y Evaluación trabaja arduamente para diseñar y evaluar políticas educativas y programas, asegurando la calidad y relevancia de la enseñanza. Este edificio se convierte así en el corazón administrativo de la universidad, donde convergen las decisiones estratégicas, la gestión financiera y la planificación académica para fomentar un entorno educativo próspero y de calidad.';
                             break;
                         case 'b':
                             buildingInfo.textContent = 'Información sobre Edificio B: Áreas, horarios, servicios, etc.';
                             break;
                         case 'c':
-                            buildingInfo.textContent = 'Información sobre Edificio C: Áreas, horarios, servicios, etc.';
+                            buildingInfo.textContent = 'El edificio de Secretaría Académica, Tutorías y Dirección de Idiomas es un componente central en el campus universitario, encargado de la coordinación académica, apoyo individualizado a través de Tutorías, y el fortalecimiento de habilidades lingüísticas extranjeras. Este espacio refleja el compromiso de la universidad con la excelencia académica y el desarrollo integral de los estudiantes..';
                             break;
+                        case 'e':
+                            buildingInfo.textContent = 'En este apartado se encuentran los estacionamientos.';
+                            break;
+                        case 'f':
+                            buildingInfo.textContent = 'Centro de desarrollo';
+                            break;
+                        case 'g':
+                            buildingInfo.textContent = 'Dirección de vinculación, gestión empresarial, educación continua, seguimiento de egresados, sistemas y soporte técnico y desarrollo de sistemas.';
+                            break;
+                        case 'h':
+                            buildingInfo.textContent = ' Energias renovables, extensión universitaria y actividades culturales y deportivas.';
+                            break;
+                        case 'i':
+                            buildingInfo.textContent = 'Biblioteca';
+                            break;
+                        case 'j':
+                            buildingInfo.textContent = 'Coordinación de Terapia Fisica , Enfermeria y Salud reproductiva.';
+                            break;
+                        case 'k':
+                            buildingInfo.textContent = 'Dirección Área Electromecanica y coordinación de criminalistica';
+                            break;     
                         default:
                             buildingInfo.textContent = 'No se encontró información para el edificio ingresado.';
                     }
